@@ -1,3 +1,4 @@
+
 let buttonColours = ["red", "blue", "green", "yellow"];
 
 let gamePattern = [];
@@ -9,7 +10,7 @@ let started = false;
 let level = 0;
 
 //jQuery to detect when keyboard is pressed:
-$(document).keypress(function() {
+$(document).on("keypress touchstart", function() {
     if (!started) {
         $("#level-title").text("Level " + level);
         nextSequence();
@@ -18,7 +19,7 @@ $(document).keypress(function() {
 });
 
 //for when a button is clicked
-$("btn").click(function() {
+$(".btn").click(function() {
     let userChosenColour = $(this).attr("id"); //-> to store the id that was clicked
     userClickedPattern.push(userChosenColour);
    
@@ -33,8 +34,6 @@ $("btn").click(function() {
 function checkAnswer(currentLevel) {
     //if-statement to check recent answer
     if (gamePattern[currentLevel] === userClickedPattern[currentLevel]) {
-        console.log("sucess");
-
     if (userClickedPattern.length === gamePattern.length) {
         //call nextSequence after delay
         setTimeout(function() {
@@ -42,15 +41,16 @@ function checkAnswer(currentLevel) {
         }, 1000);
     }
     } else {
-        console.log("wrong");
         playSound("wrong");
         //add the css for game over 
         $("body").addClass("game-over");
+         //change title to Game over 
+        $("#level-title").text("Game Over, Press Any Key to Restart");
+
         setTimeout(function() {
             $("body").removeClass("game-over");
         }, 200);
-        //change title to Game over 
-        $("#level-title").text("Game Over, Press Any Key to Restart");
+       
         startOver(); //-> to restart
     }
 }
@@ -75,12 +75,6 @@ function nextSequence() {
 
     //attribute sound to each button
     playSound(randomChosenColour);
-    
-}
-
-function playSound(name) {
-    let audio = new Audio("sounds/" + name + ".mp3");
-    audio.play();
 }
 
 function animatePress(currentColour) {
@@ -90,8 +84,15 @@ function animatePress(currentColour) {
     }, 100);
 }
 
+function playSound(name) {
+    let audio = new Audio("sounds/" + name + ".mp3");
+    audio.play();
+}
+
 function startOver() {
     level = 0;
     gamePattern = [];
     started = false;
 }
+
+
