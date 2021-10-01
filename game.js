@@ -11,7 +11,7 @@ let level = 0;
 //jQuery to detect when keyboard is pressed:
 $(document).keypress(function() {
     if (!started) {
-        $("#level-title").text("Level " + level1);
+        $("#level-title").text("Level " + level);
         nextSequence();
         started = true;
     }
@@ -43,6 +43,15 @@ function checkAnswer(currentLevel) {
     }
     } else {
         console.log("wrong");
+        playSound("wrong");
+        //add the css for game over 
+        $("body").addClass("game-over");
+        setTimeout(function() {
+            $("body").removeClass("game-over");
+        }, 200);
+        //change title to Game over 
+        $("#level-title").text("Game Over, Press Any Key to Restart");
+        startOver(); //-> to restart
     }
 }
 
@@ -50,7 +59,7 @@ function checkAnswer(currentLevel) {
 function nextSequence() {
     //nextSequence is trigger:
     userClickedPattern = [];
-    
+
     //everytime nextSequence is called, increase 1 level:
     level++;
 
@@ -81,4 +90,8 @@ function animatePress(currentColour) {
     }, 100);
 }
 
-
+function startOver() {
+    level = 0;
+    gamePattern = [];
+    started = false;
+}
